@@ -45,7 +45,7 @@ let aiThinking = false;
 console.log("Script loaded successfully");
 
 // API endpoint (update this to your server address)
-const API_URL = 'http://localhost:5000';
+const API_URL = window.location.origin;
 
 // Function to select team and start game
 function selectTeamAndStart(team) {
