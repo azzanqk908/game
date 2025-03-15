@@ -1,10 +1,11 @@
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from threading import Lock
 import time
 
 app = Flask(__name__)
-CORS(app)  # Enable Cross-Origin Resource Sharing
+CORS(app)
+
 
 # Game state
 class SuperTicTacToeGame:
@@ -195,4 +196,5 @@ def hello():
     return "Super Tic-Tac-Toe Server is running!"
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
