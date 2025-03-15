@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Tic-Tac-Toe</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <script src="script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
     <div class="container">
         <!-- Landing Page -->
         <div id="landing-page" class="landing-page">
@@ -96,8 +96,5 @@
   </div>
   <button id="chatToggleBtn" class="chat-toggle-btn" onclick="toggleChat()">Chat</button>
   
-  
-    
-    
 </body>
 </html>
