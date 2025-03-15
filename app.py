@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify, render_template  # Added render_template
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from threading import Lock
 import time
@@ -51,31 +51,29 @@ class SuperTicTacToeGame:
 
     def check_local_win(self, board_idx, symbol):
         board = self.boards[board_idx]
-        player = symbol
         for i in range(0, 9, 3):
-            if board[i] == board[i+1] == board[i+2] == player:
+            if board[i] == board[i+1] == board[i+2] == symbol:
                 return True
         for i in range(3):
-            if board[i] == board[i+3] == board[i+6] == player:
+            if board[i] == board[i+3] == board[i+6] == symbol:
                 return True
-        if board[0] == board[4] == board[8] == player:
+        if board[0] == board[4] == board[8] == symbol:
             return True
-        if board[2] == board[4] == board[6] == player:
+        if board[2] == board[4] == board[6] == symbol:
             return True
         return False
 
     def check_global_win(self, symbol):
         winners = self.board_winners
-        player = symbol
         for i in range(0, 9, 3):
-            if winners[i] == winners[i+1] == winners[i+2] == player:
+            if winners[i] == winners[i+1] == winners[i+2] == symbol:
                 return True
         for i in range(3):
-            if winners[i] == winners[i+3] == winners[i+6] == player:
+            if winners[i] == winners[i+3] == winners[i+6] == symbol:
                 return True
-        if winners[0] == winners[4] == winners[8] == player:
+        if winners[0] == winners[4] == winners[8] == symbol:
             return True
-        if winners[2] == winners[4] == winners[6] == player:
+        if winners[2] == winners[4] == winners[6] == symbol:
             return True
         return False
 
@@ -124,12 +122,7 @@ def reset_game():
             'game': game.to_json()
         })
 
-# Remove or comment out the hello() route:
-# @app.route('/')
-# def hello():
-#     return "Super Tic-Tac-Toe Server is running!"
-
-# Use the home route to serve index.html
+# Serve the game interface from index.html
 @app.route('/')
 def home():
     return render_template('index.html')
