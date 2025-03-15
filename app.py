@@ -1,11 +1,13 @@
 import os
 from flask import Flask, request, jsonify, render_template
+from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 from threading import Lock
 import time
 
 app = Flask(__name__)
 CORS(app)
+socketio = SocketIO(app)
 
 # Game state
 class SuperTicTacToeGame:
@@ -106,10 +108,13 @@ def make_move():
     cell_idx = data.get('cell')
     with game_lock:
         success, message = game.make_move(player_team, board_idx, cell_idx)
+        game_state = game.to_json()
+        # Broadcast the updated game state to all connected clients
+        socketio.emit('game_update', game_state)
         return jsonify({
             'success': success,
             'message': message,
-            'game': game.to_json()
+            'game': game_state
         })
 
 @app.route('/reset', methods=['POST'])
@@ -122,11 +127,10 @@ def reset_game():
             'game': game.to_json()
         })
 
-# Serve the game interface from index.html
 @app.route('/')
 def home():
     return render_template('index.html')
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=False)
+    socketio.run(app, host='0.0.0.0', port=port)
