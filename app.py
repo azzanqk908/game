@@ -1,12 +1,12 @@
 from flask import Flask, request, jsonify, render_template
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
 from flask_cors import CORS
 from threading import Lock
 import time, os
 
 app = Flask(__name__)
 CORS(app)
-socketio = SocketIO(app)  # Initialize SocketIO
+socketio = SocketIO(app, async_mode='gevent')  # Initialize SocketIO
 
 # Game state
 class SuperTicTacToeGame:
