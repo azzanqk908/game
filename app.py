@@ -12,12 +12,12 @@ CORS(app)
 redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
 r = redis.StrictRedis.from_url(redis_url, decode_responses=True)
 
-# Initialize SocketIO with gevent and use Redis as the message queue.
+# Initialize SocketIO only once
 socketio = SocketIO(app, async_mode='gevent', message_queue=redis_url)
 
 game_lock = Lock()
 
-# Game state class
+# Game state class (unchanged)
 class SuperTicTacToeGame:
     def __init__(self):
         self.boards = [['' for _ in range(9)] for _ in range(9)]
@@ -99,10 +99,10 @@ class SuperTicTacToeGame:
             'timerDuration': self.timer_duration
         }
 
-# Initialize game in memory
+# Initialize game
 game = SuperTicTacToeGame()
 
-# Helper functions to persist game state in Redis
+# Helper functions for Redis persistence
 def save_game_state():
     state = game.to_json()
     r.set("game_state", json.dumps(state))
@@ -130,7 +130,7 @@ def make_move():
     with game_lock:
         success, message = game.make_move(player_team, board_idx, cell_idx)
         state = save_game_state()
-        # Broadcast the updated game state to all connected clients
+        # Broadcast update to all clients via websockets
         socketio.emit('game_update', state)
         return jsonify({
             'success': success,
