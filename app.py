@@ -1,14 +1,23 @@
+import os, json, redis
 from flask import Flask, request, jsonify, render_template
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 from threading import Lock
-import time, os
+import time
 
 app = Flask(__name__)
 CORS(app)
-socketio = SocketIO(app, async_mode='gevent')  # Initialize SocketIO
 
-# Game state
+# Initialize Redis
+redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
+r = redis.StrictRedis.from_url(redis_url, decode_responses=True)
+
+# Initialize SocketIO with gevent and use Redis as the message queue.
+socketio = SocketIO(app, async_mode='gevent', message_queue=redis_url)
+
+game_lock = Lock()
+
+# Game state class
 class SuperTicTacToeGame:
     def __init__(self):
         self.boards = [['' for _ in range(9)] for _ in range(9)]
@@ -90,14 +99,27 @@ class SuperTicTacToeGame:
             'timerDuration': self.timer_duration
         }
 
-# Initialize game and lock
+# Initialize game in memory
 game = SuperTicTacToeGame()
-game_lock = Lock()
+
+# Helper functions to persist game state in Redis
+def save_game_state():
+    state = game.to_json()
+    r.set("game_state", json.dumps(state))
+    return state
+
+def load_game_state():
+    state_str = r.get("game_state")
+    if state_str:
+        return json.loads(state_str)
+    else:
+        return game.to_json()
 
 @app.route('/game', methods=['GET'])
 def get_game():
     with game_lock:
-        return jsonify(game.to_json())
+        state = load_game_state()
+        return jsonify(state)
 
 @app.route('/move', methods=['POST'])
 def make_move():
@@ -107,13 +129,13 @@ def make_move():
     cell_idx = data.get('cell')
     with game_lock:
         success, message = game.make_move(player_team, board_idx, cell_idx)
-        game_state = game.to_json()
-        # Broadcast update to all clients via websockets
-        socketio.emit('game_update', game_state)
+        state = save_game_state()
+        # Broadcast the updated game state to all connected clients
+        socketio.emit('game_update', state)
         return jsonify({
             'success': success,
             'message': message,
-            'game': game_state
+            'game': state
         })
 
 @app.route('/reset', methods=['POST'])
@@ -121,9 +143,10 @@ def reset_game():
     with game_lock:
         global game
         game = SuperTicTacToeGame()
+        state = save_game_state()
         return jsonify({
             'success': True,
-            'game': game.to_json()
+            'game': state
         })
 
 @app.route('/')
