@@ -1,13 +1,12 @@
-import os
 from flask import Flask, request, jsonify, render_template
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 from threading import Lock
-import time
+import time, os
 
 app = Flask(__name__)
 CORS(app)
-socketio = SocketIO(app)
+socketio = SocketIO(app)  # Initialize SocketIO
 
 # Game state
 class SuperTicTacToeGame:
@@ -109,7 +108,7 @@ def make_move():
     with game_lock:
         success, message = game.make_move(player_team, board_idx, cell_idx)
         game_state = game.to_json()
-        # Broadcast the updated game state to all connected clients
+        # Broadcast update to all clients via websockets
         socketio.emit('game_update', game_state)
         return jsonify({
             'success': success,

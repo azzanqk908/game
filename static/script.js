@@ -31,7 +31,14 @@ window.fetch = function(url, options) {
 };
 
 
+// Connect to the SocketIO server
+const socket = io(window.location.origin);
 
+// Listen for real-time game updates
+socket.on('game_update', function(gameState) {
+    console.log("Received game update via SocketIO:", gameState);
+    updateGameState(gameState);
+});
 
 
 // Game state variables
