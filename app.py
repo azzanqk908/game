@@ -1,6 +1,3 @@
-from gevent import monkey
-monkey.patch_all()
-
 import os, json, redis
 from flask import Flask, request, jsonify, render_template
 from flask_socketio import SocketIO, emit
