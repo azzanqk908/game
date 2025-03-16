@@ -1,3 +1,6 @@
+from gevent import monkey
+monkey.patch_all()
+
 import os, json, redis
 from flask import Flask, request, jsonify, render_template
 from flask_socketio import SocketIO, emit
@@ -10,7 +13,7 @@ CORS(app)
 
 # Initialize Redis and get the URL (make sure REDIS_URL is set in your environment)
 redis_url = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
-r = redis.StrictRedis.from_url(redis_url, decode_responses=True, ssl=True)
+r = redis.Redis.from_url(redis_url, decode_responses=True)
 
 # Initialize SocketIO only once using the Redis message queue and gevent async mode
 socketio = SocketIO(app, async_mode='gevent', message_queue=redis_url)
