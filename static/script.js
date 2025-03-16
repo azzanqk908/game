@@ -35,7 +35,7 @@ window.fetch = function(url, options) {
 };
 
 // Connect to the SocketIO server
-const socket = io(API_URL);
+const socket = io(API_URL, { transports: ['websocket'] });
 
 // Listen for real-time game updates
 socket.on('game_update', function(gameState) {
