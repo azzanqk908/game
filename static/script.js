@@ -54,15 +54,6 @@ console.log("Script loaded successfully");
 // API endpoint (update this to your server address)
 const API_URL = window.location.origin;
 
-// Connect to the SocketIO server
-const socket = io(window.location.origin);
-
-// Listen for game state updates pushed from the server
-socket.on('game_update', function(gameState) {
-    console.log("Received game update via SocketIO:", gameState);
-    updateGameState(gameState);
-});
-
 // Function to select team and start game
 function selectTeamAndStart(team) {
     console.log(`selectTeamAndStart called with team ${team}`);
