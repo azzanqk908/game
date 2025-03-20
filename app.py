@@ -212,7 +212,7 @@ def reset_game():
         state = save_game_state()
         
         # Broadcast reset to everyone:
-        socketio.emit('game_reset', { 'message': 'Game reset' }, broadcast=True, include_self=True)
+        socketio.emit('game_reset', { 'message': 'Game reset' })
         
         return jsonify({
             'success': True,
