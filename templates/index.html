@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Super Tic-Tac-Toe</title>
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  
   <!-- Load Socket.IO client library first -->
   <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
-  <!-- Then load your custom script -->
+  <!-- Then load your custom script (script.js) -->
   <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
@@ -19,10 +21,12 @@
       
       <div class="team-selection glass-card">
         <h2>Choose Your Team</h2>
-        <button class="team-btn team-x" onclick="selectTeamAndStart('X')">
+        <!-- CHANGED: now calls selectTeamAndStartMultiplayer instead of selectTeamAndStart -->
+        <button class="team-btn team-x" onclick="selectTeamAndStartMultiplayer('X')">
           <i class="fas fa-times"></i>Team X
         </button>
-        <button class="team-btn team-o" onclick="selectTeamAndStart('O')">
+        <!-- CHANGED: same here -->
+        <button class="team-btn team-o" onclick="selectTeamAndStartMultiplayer('O')">
           <i class="far fa-circle"></i>Team O
         </button>
       </div>
@@ -111,7 +115,5 @@
   </div>
   <button id="chatToggleBtn" class="chat-toggle-btn" onclick="toggleChat()">Chat</button>
   
-
-
 </body>
 </html>
