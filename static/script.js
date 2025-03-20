@@ -1,7 +1,3 @@
-/******************************************/
-/*              script.js                 */
-/******************************************/
-
 // --------------- 1) Basic Setup ---------------
 const API_URL = window.location.origin;
 
@@ -78,7 +74,7 @@ function selectTeamAndStart(team) {
 function selectTeamAndStartMultiplayer(team) {
   aiEnabled = false; // turn off AI mode
   selectTeamAndStart(team); // sets up board
-  startPolling(); // or rely on socket updates
+  //startPolling(); // or rely on socket updates
 }
 
 // --- (B) AI Start ---
