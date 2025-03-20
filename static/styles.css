@@ -261,6 +261,25 @@ h1 {
     justify-content: center;
 }
 
+.linkedin-link {
+    position: fixed;       /* fix it in one place */
+    bottom: 20px;          /* 20px from the bottom */
+    right: 20px;           /* 20px from the right */
+    font-size: 2rem;       /* make icon bigger */
+    z-index: 999;          /* ensure it's on top if needed */
+  }
+  
+  .linkedin-link a {
+    color: #0e76a8;        /* LinkedIn blue color */
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .linkedin-link a:hover {
+    color: #0b5c7e;        /* darker on hover */
+  }
+  
+
 .global-board {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

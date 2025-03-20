@@ -12,6 +12,7 @@
   <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
   <!-- Then load your custom script (script.js) -->
   <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
   <div class="container">
@@ -109,6 +110,12 @@
     </div>
   </div>
   <button id="chatToggleBtn" class="chat-toggle-btn" onclick="toggleChat()">Chat</button>
+
+  <div class="linkedin-link">
+    <a href="https://www.linkedin.com/in/azzanalkindi/" target="_blank" rel="noopener">
+      <i class="fab fa-linkedin"></i>
+    </a>
+  </div>
   
 </body>
 </html>

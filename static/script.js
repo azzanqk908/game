@@ -42,14 +42,11 @@ socket.on('chat_message', function(data) {
 });
 
 socket.on('game_reset', function(data) {
-  console.log("Received game_reset event:", data);
-  
-  // 1) Clear the stored team, if you want to force them to pick again:
+  console.log("Got game_reset event:", data);
   localStorage.removeItem('superTTT-team');
-  
-  // 2) Force back to landing page
   goBackToLanding();
 });
+
 
 
 
