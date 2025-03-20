@@ -24,6 +24,19 @@ socket.on('game_update', function(updatedState) {
   }
 });
 
+socket.on('chat_message', function(data) {
+  // data = { username: 'X', message: 'Hello...' }
+  var chatMessages = document.getElementById("chatMessages");
+
+  // Create a new div for the incoming message
+  var newMessageElem = document.createElement("div");
+  newMessageElem.className = "chat-message";
+  newMessageElem.innerHTML = "<strong>Team " + data.username + ":</strong> " + data.message;
+
+  chatMessages.appendChild(newMessageElem);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+});
+
 // --------------- 3) Function to override fetch in AI mode only ---------------
 function enableAIFetchOverrideForAI() {
   const originalFetch = window.fetch;
@@ -555,6 +568,11 @@ function fullReset() {
     });
 }
 
+function switchToAI() {
+  // We'll just go back to landing, then do startAIGame.
+  goBackToLanding();
+  startAIGame();
+}
 
 // --------------- 13) On Page Load: Do NOT Remove localStorage ---------------
 window.addEventListener('load', () => {
@@ -609,16 +627,19 @@ function toggleChat() {
 
 function sendChatMessage() {
   if (!playerTeam) return;
+
   var chatInput = document.getElementById("chatInput");
   var message = chatInput.value.trim();
   if (message === "") return;
-  var chatMessages = document.getElementById("chatMessages");
-  var newMessageElem = document.createElement("div");
-  newMessageElem.className = "chat-message";
-  newMessageElem.innerHTML = "<strong>Team " + playerTeam + ":</strong> " + message;
-  chatMessages.appendChild(newMessageElem);
+
+  // Instead of just adding locally, we emit to the server:
+  socket.emit('chat_message', {
+    username: playerTeam,  // or a user ID, etc.
+    message: message
+  });
+
+  // Clear input
   chatInput.value = "";
-  chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 function addBackgroundElements() {

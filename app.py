@@ -194,6 +194,16 @@ def make_move():
             'game': new_state
         })
 
+# Chat message event
+@socketio.on('chat_message')
+def handle_chat_message(data):
+    """
+    data might look like: { 'username': 'X', 'message': 'Hello everyone!' }
+    We'll broadcast it to all clients.
+    """
+    # Broadcast to ALL clients, including sender
+    socketio.emit('chat_message', data)
+
 @app.route('/reset', methods=['POST'])
 def reset_game():
     with game_lock:
