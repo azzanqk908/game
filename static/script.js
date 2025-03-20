@@ -396,7 +396,7 @@ function startPolling() {
   pollingInterval = setInterval(fetchGameState, 2000);
 }
 
-
+//test
 // --------------- 10) Local AI: processLocalMove ---------------
 function createEmptyLocalGame() {
   return {
