@@ -72,6 +72,17 @@ function enableAIFetchOverride() {
   };
 }
 
+function resetServerGame() {
+  fetch(`${API_URL}/reset`, { method: 'POST' })
+    .then(r => r.json())
+    .then(d => {
+      mpGameState = d.game;
+      renderBoardUI(mpGameState);
+      alert("Server game has been reset!");
+    })
+    .catch(err => console.error("Error resetting server game:", err));
+}
+
 function restoreOriginalFetch() {
   // Restore the real fetch so calls go to the server again
   window.fetch = originalFetch;
@@ -193,16 +204,6 @@ function switchToMultiplayer() {
   }
 }
 
-function resetServerGame() {
-  fetch(`${API_URL}/reset`, { method: 'POST' })
-    .then(r => r.json())
-    .then(d => {
-      mpGameState = d.game;
-      renderBoardUI(mpGameState);
-      alert("Server game has been reset!");
-    })
-    .catch(err => console.error("Error resetting server game:", err));
-}
 
 // Then if the user types "reeeset()" in the console
 window.reeeset = resetServerGame;

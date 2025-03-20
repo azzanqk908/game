@@ -262,25 +262,6 @@ h1 {
 }
 
 
-.linkedin-link {
-    background-color: #0e76a8;
-    padding: 8px 12px;
-    border-radius: 4px;
-    margin-top: 10px;
-    display: inline-block;
-  }
-  
-  .linkedin-link a {
-    color: #fff;                 /* make the "in" icon white */
-    font-size: 1.5rem;          /* size of the icon text */
-    text-decoration: none;      /* remove underline */
-  }
-  
-  .linkedin-link a:hover {
-    color: #ffffffcc;  /* slightly lighter on hover if you like */
-  }
-  
-
 .global-board {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -408,7 +389,23 @@ h1 {
     margin-top: 30px;
     gap: 15px;
     flex-wrap: wrap;
+    text-align: center; /* center contents in this container */
+    margin-bottom: 20px; 
 }
+
+.linkedin-link {
+    display: inline-block;      /* so 'text-align: center' can center it */
+    background-color: #0e76a8;  /* LinkedIn blue */
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 1.5rem;
+  }
+  
+  .linkedin-link a {
+    color: #fff;
+    text-decoration: none;
+  }
 
 .btn {
     padding: 12px 24px;
