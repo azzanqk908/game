@@ -407,7 +407,7 @@ function createEmptyLocalGame() {
     winner: '',
     gameOver: false,
     lastMoveTimestamp: 0,
-    timerDuration: 2
+    //timerDuration: 2
   };
 }
 

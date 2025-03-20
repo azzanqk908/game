@@ -263,24 +263,23 @@ h1 {
 
 
 .linkedin-link {
-    position: fixed;
-    bottom: 20px;         /* 20px above the bottom edge */
-    left: 50%;            /* center horizontally */
-    transform: translateX(-50%); /* shift left by 50% of its width to truly center */
-    z-index: 9999;        /* ensure it's on top of other elements */
-    font-size: 2rem;      /* make icon bigger if you want */
+    background-color: #0e76a8;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-top: 10px;
+    display: inline-block;
   }
   
   .linkedin-link a {
-    color: #fff;          /* white text/icon */
-    text-decoration: none;
-    transition: color 0.3s;
+    color: #fff;                 /* make the "in" icon white */
+    font-size: 1.5rem;          /* size of the icon text */
+    text-decoration: none;      /* remove underline */
   }
   
   .linkedin-link a:hover {
-    color: #ccc;          /* lighter on hover */
+    color: #ffffffcc;  /* slightly lighter on hover if you like */
   }
-
+  
 
 .global-board {
     display: grid;
