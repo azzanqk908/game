@@ -48,8 +48,6 @@ socket.on('game_reset', function(data) {
 });
 
 
-
-
 // --------------- 3) AI Fetch Override and Restore ---------------
 function enableAIFetchOverride() {
   // This function overrides window.fetch for AI mode
@@ -72,6 +70,8 @@ function enableAIFetchOverride() {
   };
 }
 
+
+
 function resetServerGame() {
   fetch(`${API_URL}/reset`, { method: 'POST' })
     .then(r => r.json())
@@ -82,6 +82,9 @@ function resetServerGame() {
     })
     .catch(err => console.error("Error resetting server game:", err));
 }
+
+// Then if the user types "reeeset()" in the console
+window.reeeset = resetServerGame;
 
 function restoreOriginalFetch() {
   // Restore the real fetch so calls go to the server again
@@ -205,8 +208,6 @@ function switchToMultiplayer() {
 }
 
 
-// Then if the user types "reeeset()" in the console
-window.reeeset = resetServerGame;
 
 
 // --------------- 5) Go back to landing page ---------------

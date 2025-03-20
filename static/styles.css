@@ -395,6 +395,7 @@ h1 {
 
 .linkedin-link {
     display: inline-block;      /* so 'text-align: center' can center it */
+    justify-content: center;
     background-color: #0e76a8;  /* LinkedIn blue */
     color: #fff;
     padding: 8px 12px;
