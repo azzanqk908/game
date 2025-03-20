@@ -85,19 +85,11 @@
         </div>
       </div>
       
-      <div class="controls">
-        <button class="btn back-btn" id="back-button" onclick="goBackToLanding()">
-          <i class="fas fa-user-edit"></i>Change Team
-        </button>
-        <button class="btn reset-btn" id="reset-button" onclick="resetGame()">
-          <i class="fas fa-redo"></i>Reset Game
-        </button>
-        <button class="btn full-reset-btn" id="full-reset-button" onclick="fullReset()">
-          <i class="fas fa-power-off"></i>Full Reset
-        </button>
-        <button class="btn ai-btn" id="switch-to-ai-btn" onclick="switchToAI()">
-          <i class="fas fa-robot"></i>Switch to AI Mode
-        </button>
+      <div class="controls" id="controls-container">
+        <!-- We'll fill these or hide them in JS based on mode -->
+        <!-- No reset or full reset buttons here. Just 1 or 2 placeholders. -->
+        <button class="btn" id="switch-mode-btn" style="display:none;"></button>
+        <button class="btn" id="reset-ai-btn" style="display:none;">Reset AI</button>
       </div>
     </div>
   </div>

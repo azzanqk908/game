@@ -92,50 +92,109 @@ function selectTeamAndStart(team) {
 
 // (A) Multiplayer Start
 function selectTeamAndStartMultiplayer(team) {
-  // We are leaving AI mode => ensure we restore original fetch
-  restoreOriginalFetch(); // ADDED
+  restoreOriginalFetch(); // revert to server fetch
   aiEnabled = false;
-  
   selectTeamAndStart(team);
-  fetchGameState(); // or startPolling()
+
+  // Show timer again
+  const timerElement = document.getElementById('timer');
+  if (timerElement) {
+    timerElement.style.display = 'inline-block';
+  }
+
+  // Hide AI indicator if present
+  const aiIndicator = document.getElementById('ai-indicator');
+  if (aiIndicator) {
+    aiIndicator.style.display = 'none';
+  }
+
+  // Buttons: only "Switch to AI" is visible
+  const switchModeBtn = document.getElementById('switch-mode-btn');
+  switchModeBtn.style.display = 'inline-block';
+  switchModeBtn.textContent = "Switch to AI";
+  switchModeBtn.onclick = switchToAI;
+
+  // Hide the local reset AI button
+  const resetAiBtn = document.getElementById('reset-ai-btn');
+  resetAiBtn.style.display = 'none';
+
+  // Possibly fetch state from server
+  fetchGameState();
 }
 
 
 // (B) AI Start
 function startAIGame() {
   aiEnabled = true;
+  
+  // Enable AI fetch override
+  enableAIFetchOverride();
 
-  // Turn on AI fetch override
-  enableAIFetchOverride(); // ADDED
+  selectTeamAndStart("X"); // or whichever
 
-  selectTeamAndStart('X'); // user is X
-
-  // If no aiGameState yet, create it
+  // Create aiGameState if needed
   if (!aiGameState) {
     aiGameState = createEmptyLocalGame();
   }
-  // Render local board
   renderBoardUI(aiGameState);
 
-  // Show AI indicator
-  const aiIndicator = document.createElement('div');
-  aiIndicator.className = 'ai-active';
-  aiIndicator.id = 'ai-indicator';
-  aiIndicator.innerHTML = '<i class="fas fa-robot"></i> AI Mode Active';
-  document.querySelector('.game-info').appendChild(aiIndicator);
+  // 1) If there's already an #ai-indicator, don't duplicate
+  let aiIndicator = document.getElementById('ai-indicator');
+  if (!aiIndicator) {
+    aiIndicator = document.createElement('div');
+    aiIndicator.className = 'ai-active';
+    aiIndicator.id = 'ai-indicator';
+    aiIndicator.innerHTML = '<i class="fas fa-robot"></i> AI Mode Active';
+    document.querySelector('.game-info').appendChild(aiIndicator);
+  }
   aiIndicator.style.display = 'block';
-  
-  // Hide server timer
+
+  // 2) Hide timer for AI
   const timerElement = document.getElementById('timer');
   if (timerElement) {
     timerElement.style.display = 'none';
   }
-  
-  const moveInfo = document.getElementById('move-info');
-  if (moveInfo) {
-    moveInfo.textContent = 'Playing against AI - make your move!';
+
+  // 3) Show the correct buttons: "Reset AI" and "Switch to Multiplayer"
+  const switchModeBtn = document.getElementById('switch-mode-btn');
+  switchModeBtn.style.display = 'inline-block';
+  switchModeBtn.textContent = "Switch to Multiplayer";
+  switchModeBtn.onclick = switchToMultiplayer; // we'll define this
+
+  const resetAiBtn = document.getElementById('reset-ai-btn');
+  resetAiBtn.style.display = 'inline-block';
+  resetAiBtn.onclick = function() {
+    aiGameState = createEmptyLocalGame();
+    renderBoardUI(aiGameState);
+  };
+
+  // Hide any server reset or other buttons we don't want
+  // e.g. no "reeeset" button for the server
+}
+
+function switchToMultiplayer() {
+  // If they already selected a team, go direct
+  if (playerTeam) {
+    selectTeamAndStartMultiplayer(playerTeam);
+  } else {
+    // else go to landing
+    goBackToLanding();
   }
 }
+
+function resetServerGame() {
+  fetch(`${API_URL}/reset`, { method: 'POST' })
+    .then(r => r.json())
+    .then(d => {
+      mpGameState = d.game;
+      renderBoardUI(mpGameState);
+      alert("Server game has been reset!");
+    })
+    .catch(err => console.error("Error resetting server game:", err));
+}
+
+// Then if the user types "reeeset()" in the console
+window.reeeset = resetServerGame;
 
 
 // --------------- 5) Go back to landing page ---------------
@@ -542,14 +601,17 @@ function fullReset() {
 
 // --------------- 13) On Page Load ---------------
 window.addEventListener('load', () => {
-  console.log("Window loaded, checking for saved team");
-
   const savedTeam = localStorage.getItem('superTTT-team');
   if (savedTeam) {
-    console.log(`Found saved team: ${savedTeam}`);
+    // If user already picked a team, jump straight to multiplayer
     selectTeamAndStartMultiplayer(savedTeam);
+  } else {
+    // else show landing
+    document.getElementById('landing-page').style.display = 'flex';
+    document.getElementById('game-page').style.display = 'none';
   }
 });
+
 
 
 // --------------- 14) Chat + Background ---------------
