@@ -41,6 +41,17 @@ socket.on('chat_message', function(data) {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
+socket.on('game_reset', function(data) {
+  console.log("Received game_reset event:", data);
+  
+  // 1) Clear the stored team, if you want to force them to pick again:
+  localStorage.removeItem('superTTT-team');
+  
+  // 2) Force back to landing page
+  goBackToLanding();
+});
+
+
 
 // --------------- 3) AI Fetch Override and Restore ---------------
 function enableAIFetchOverride() {
@@ -111,7 +122,7 @@ function selectTeamAndStartMultiplayer(team) {
   // Buttons: only "Switch to AI" is visible
   const switchModeBtn = document.getElementById('switch-mode-btn');
   switchModeBtn.style.display = 'inline-block';
-  switchModeBtn.textContent = "Switch to AI";
+  switchModeBtn.textContent = "Switch to AI mode";
   switchModeBtn.onclick = switchToAI;
 
   // Hide the local reset AI button
@@ -122,6 +133,9 @@ function selectTeamAndStartMultiplayer(team) {
   fetchGameState();
 }
 
+function switchToAI() {
+  startAIGame();
+}
 
 // (B) AI Start
 function startAIGame() {

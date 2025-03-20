@@ -209,10 +209,14 @@ def reset_game():
     with game_lock:
         global game
         game = SuperTicTacToeGame()
-        new_state = save_game_state()
+        state = save_game_state()
+        
+        # Broadcast reset to everyone:
+        socketio.emit('game_reset', { "message": "Game has been reset" })
+        
         return jsonify({
             'success': True,
-            'game': new_state
+            'game': state
         })
 
 @app.route('/')
