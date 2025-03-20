@@ -344,6 +344,20 @@ function startPolling() {
 }
 
 function processMove(moveData) {
+  // Ensure gameState is defined
+  if (!gameState || !gameState.boards) {
+    gameState = {
+      boards: Array.from({ length: 9 }, () => Array(9).fill('')),
+      boardWinners: Array(9).fill(''),
+      nextBoard: -1,
+      nextMoveTime: Date.now(),
+      winner: '',
+      gameOver: false,
+      lastMoveTimestamp: 0,
+      timerDuration: 2
+    };
+  }
+  
   const cooldownPeriod = 2; // For testing
   
   if (!aiEnabled && !moveData.aiMove) {
@@ -352,6 +366,7 @@ function processMove(moveData) {
       }
   }
   
+  // Ensure boards and boardWinners arrays exist (should be redundant now, but kept for safety)
   if (!gameState.boards) {
     gameState.boards = Array.from({ length: 9 }, () => Array(9).fill(''));
   }
@@ -537,7 +552,7 @@ function fullReset() {
 // Check for stored team preference on load
 window.addEventListener('load', () => {
     console.log("Window loaded, checking for saved team");
-    localStorage.removeItem('superTTT-team');
+    //localStorage.removeItem('superTTT-team');
     const savedTeam = localStorage.getItem('superTTT-team');
     if (savedTeam) {
         console.log(`Found saved team: ${savedTeam}`);
