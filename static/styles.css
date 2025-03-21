@@ -394,22 +394,22 @@ h1 {
 }
 
 .linkedin-link {
-    display: flex;              /* Add this */
-    justify-content: center;    /* Add this */
-    align-items: center;        /* Optional, vertically centers icon */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.linkedin-link a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     background-color: #0e76a8;
     color: #fff;
     padding: 8px 12px;
     border-radius: 4px;
     font-size: 1.5rem;
-    margin: 0 auto;             /* ensures centering in block mode */
-}
-
-  
-  .linkedin-link a {
-    color: #fff;
     text-decoration: none;
-  }
+}
 
 .btn {
     padding: 12px 24px;
