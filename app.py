@@ -27,7 +27,7 @@ class SuperTicTacToeGame:
         self.next_move_time = time.time()
         self.winner = ''
         self.game_over = False
-        self.timer_duration = 5  #  seconds for testing
+        self.timer_duration = 30  #  seconds for testing
 
     def make_move(self, player_team, board_idx, cell_idx):
         if time.time() < self.next_move_time:
