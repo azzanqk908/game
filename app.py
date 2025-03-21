@@ -4,6 +4,8 @@ from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 from threading import Lock
 import time
+import threading
+
 
 app = Flask(__name__)
 CORS(app)
@@ -29,6 +31,7 @@ class SuperTicTacToeGame:
         self.winner = ''
         self.game_over = False
         self.timer_duration = 30  #  seconds for testing
+        self.reset_scheduled = False
 
     def make_move(self, player_team, board_idx, cell_idx):
         if time.time() < self.next_move_time:
@@ -47,6 +50,11 @@ class SuperTicTacToeGame:
             if self.check_global_win(symbol_to_place):
                 self.winner = symbol_to_place
                 self.game_over = True
+
+                if not self.reset_scheduled:
+                    self.reset_scheduled = True
+                    threading.Timer(30.0, auto_reset_game).start()
+
         # or check for draw in local board
         elif all(cell != '' for cell in self.boards[board_idx]):
             self.board_winners[board_idx] = 'D'
@@ -158,6 +166,14 @@ def load_game_state():
         return json.loads(state_str)
     else:
         return game.to_json()
+    
+def auto_reset_game():
+    global game
+    with game_lock:
+        game = SuperTicTacToeGame()  # brand new
+        state = save_game_state()    # store in Redis
+        socketio.emit('game_reset', { 'message': 'Auto-reset after 30s' })
+
 
 
 # ----------------------------- Routes -----------------------------
