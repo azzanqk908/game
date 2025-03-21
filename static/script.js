@@ -32,6 +32,18 @@ socket.on('game_update', function(updatedState) {
   }
 });
 
+socket.on('player_count', function(data) {
+  // data = { count: number }
+  console.log("Player count updated:", data.count);
+
+  // Update the DOM element that shows the count
+  const onlineCounter = document.getElementById('online-counter');
+  if (onlineCounter) {
+    onlineCounter.textContent = data.count + " players online";
+  }
+});
+
+
 socket.on('chat_message', function(data) {
   var chatMessages = document.getElementById("chatMessages");
   var newMessageElem = document.createElement("div");

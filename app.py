@@ -18,6 +18,7 @@ socketio = SocketIO(app, async_mode='gevent', message_queue=redis_url)
 game_lock = Lock()
 
 
+
 # ----------------------------- Game State Class -----------------------------
 class SuperTicTacToeGame:
     def __init__(self):
@@ -205,6 +206,24 @@ def handle_chat_message(data):
     """
     # Broadcast to ALL clients, including sender
     socketio.emit('chat_message', data)
+
+    
+connected_users = 0
+
+@socketio.on('connect')
+def handle_connect():
+    global connected_users
+    connected_users += 1
+    # Notify all clients of the new count
+    socketio.emit('player_count', {'count': connected_users})
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    global connected_users
+    if connected_users > 0:
+        connected_users -= 1
+    # Notify all clients of the updated count
+    socketio.emit('player_count', {'count': connected_users})
 
 @app.route('/reset', methods=['POST'])
 def reset_game():
