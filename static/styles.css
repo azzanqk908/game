@@ -394,14 +394,17 @@ h1 {
 }
 
 .linkedin-link {
-    display: inline-block;
-    background-color: #0e76a8; /* LinkedIn blue */
+    display: flex;              /* Add this */
+    justify-content: center;    /* Add this */
+    align-items: center;        /* Optional, vertically centers icon */
+    background-color: #0e76a8;
     color: #fff;
     padding: 8px 12px;
     border-radius: 4px;
     font-size: 1.5rem;
-    text-align: center;   /* center the text inside the box */
-  }
+    margin: 0 auto;             /* ensures centering in block mode */
+}
+
   
   .linkedin-link a {
     color: #fff;

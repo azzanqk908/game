@@ -164,9 +164,11 @@ def load_game_state():
 @app.route('/game', methods=['GET'])
 def get_game():
     with game_lock:
-        # Load from Redis just to ensure the returned data is correct
-        current_state = load_game_state()
-        return jsonify(current_state)
+        restore_game_from_redis()
+        state = game.to_json()
+        r.set("game_state", json.dumps(state))
+
+        return jsonify(state)
 
 @app.route('/move', methods=['POST'])
 def make_move():
